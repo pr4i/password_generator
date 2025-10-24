@@ -12,7 +12,7 @@ class GenParams(BaseModel):
     use_lower: bool = True
     use_upper: bool = True
     use_digits: bool = True
-    use_symbols: bool = True
+    #use_symbols: bool = True
 
 def _alphabet(params: GenParams):
     alphabet = ""
