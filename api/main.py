@@ -10,8 +10,8 @@ app = FastAPI(title="Password Generator API")
 class GenParams(BaseModel):
     length: int = 12
     use_lower: bool = True
-    use_upper: bool = True
-    use_digits: bool = True
+    #use_upper: bool = True
+    #use_digits: bool = True
     use_symbols: bool = True
 
 def _alphabet(params: GenParams):
