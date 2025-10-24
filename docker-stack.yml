@@ -1,0 +1,65 @@
+version: "3.9"
+services:
+  api:
+    build: ./api
+    image: pwgen/api:latest
+    environment:
+      - POLICY_URL=http://policy-service:5001
+      - AUDIT_URL=http://audit-service:5002
+    deploy:
+      replicas: 2
+      restart_policy: { condition: on-failure }
+      placement: { constraints: [] }
+    ports:
+      - target: 8000
+        published: 8000
+        protocol: tcp
+        mode: ingress
+    networks: [frontend_net, backend_net]
+
+  policy-service:
+    build: ./policy-service
+    image: pwgen/policy:latest
+    deploy: { replicas: 1 }
+    networks: [backend_net]
+
+  audit-service:
+    build: ./audit-service
+    image: pwgen/audit:latest
+    deploy: { replicas: 1 }
+    networks: [backend_net]
+
+  frontend:
+    build: ./frontend
+    image: pwgen/frontend:latest
+    deploy: { replicas: 1 }
+    networks: [frontend_net]
+    ports:
+      - target: 5173
+        published: 80
+        protocol: tcp
+        mode: ingress
+
+  nginx:
+    image: nginx:stable
+    configs:
+      - source: nginx_conf
+        target: /etc/nginx/nginx.conf
+    deploy:
+      replicas: 1
+      placement: { constraints: [] }
+      restart_policy: { condition: on-failure }
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: ingress
+    networks: [frontend_net, backend_net]
+
+networks:
+  frontend_net:
+  backend_net:
+
+configs:
+  nginx_conf:
+    file: ./nginx/nginx.conf
