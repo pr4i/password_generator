@@ -1,11 +1,22 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import os, random, string, httpx, math
+from fastapi.middleware.cors import CORSMiddleware
 
 POLICY_URL = os.getenv("POLICY_URL", "http://policy-service:5001")
 AUDIT_URL = os.getenv("AUDIT_URL", "http://audit-service:5002")
 
 app = FastAPI(title="Password Generator API")
+
+# --- Добавляем CORS ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # можно заменить "*" на ["http://localhost:5173"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 class GenParams(BaseModel):
     length: int = 12
