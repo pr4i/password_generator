@@ -30,15 +30,12 @@ services:
     networks: [backend_net]
 
   frontend:
-    build: ./frontend
     image: pwgen/frontend:latest
-    deploy: { replicas: 1 }
+    deploy:
+      replicas: 1
     networks: [frontend_net]
-    ports:
-      - target: 5173
-        published: 80
-        protocol: tcp
-        mode: ingress
+    # Порты НЕ публикуем наружу — их проксирует NGINX
+
 
   nginx:
     image: nginx:stable
@@ -58,7 +55,9 @@ services:
 
 networks:
   frontend_net:
+    external: true
   backend_net:
+    external: true
 
 configs:
   nginx_conf:
