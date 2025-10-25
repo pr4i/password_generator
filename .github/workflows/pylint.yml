@@ -1,9 +1,9 @@
-name: Pylint
+name: Pylint check
 
 on:
   pull_request:
     branches:
-    - dev
+      - dev
 
 jobs:
   build:
@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11"]
+
     steps:
       - uses: actions/checkout@v3
 
@@ -24,12 +25,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pylint
 
-      - name: Analysing the code with pylint
+      - name: Run pylint
         run: |
-          pylint $(git ls-files '*.py') --output=lint.txt || true
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: lint.txt
-          path: lint.txt
+          pylint $(git ls-files '*.py') --output-format=colorized || true
