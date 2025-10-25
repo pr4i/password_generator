@@ -1,7 +1,7 @@
 services:
   api:
     build: ./api
-    ports: ["8000:8000"]
+    ports: ["8080:8000"]
     environment:
       - POLICY_URL=http://policy-service:5001
       - AUDIT_URL=http://audit-service:5002
