@@ -60,3 +60,5 @@ async def history():
         except Exception as e:
             raise HTTPException(502, f"audit error: {e}")
 #тест
+#ntcn
+# test pylint trigger
